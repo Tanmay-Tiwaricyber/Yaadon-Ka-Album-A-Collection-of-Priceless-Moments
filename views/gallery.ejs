@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery</title>
+    <link rel="stylesheet" href="/css/gallery.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Decorative Doodles -->
+        <span class="doodle doodle-1">🎨</span>
+        <span class="doodle doodle-2">🌟</span>
+
+        <!-- Page Header -->
+        <header>
+            <h1>Gallery</h1>
+            <p>Welcome, <%= user %>!</p>
+            <a href="/logout" class="btn-logout">Logout</a>
+        </header>
+
+        <!-- Image Upload Form -->
+        <section class="upload-section">
+            <h2>Upload Image</h2>
+            <form action="/upload" method="POST" enctype="multipart/form-data" class="upload-form">
+                <input type="file" name="image" required multiple>
+                <select name="folder">
+                    <option value="A">2024-25</option>
+                </select>
+                <button type="submit" class="btn-upload">Upload</button>
+            </form>
+        </section>
+        <!-- Folder Listing -->
+        <section class="folder-section">
+            <h2>Folders</h2>
+            <div class="folder-list">
+                <a href="/uploads/A" class="folder-card">Batch 2024-25</a>
+            </div>
+        </section>
+    </div>
+</body>
+</html>

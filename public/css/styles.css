@@ -1,0 +1,134 @@
+@import url('https://fonts.googleapis.com/css2?family=Patrick+Hand&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Patrick Hand', cursive;
+}
+
+body {
+    background-color: #fef9c3; /* Light doodle yellow */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden; /* Prevents any unwanted scrollbars */
+    padding: 0;
+    margin: 0;
+}
+
+.container {
+    background: white;
+    padding: 30px;
+    width: 100%;
+    max-width: 450px; /* Adjust for wider screens */
+    text-align: center;
+    border-radius: 15px;
+    box-shadow: 5px 5px 0px #222;
+    border: 3px solid black;
+    position: relative;
+    transform: translate3d(0, 0, 0); /* Ensures smoother page load rendering */
+    transition: none; /* No transitions on container size */
+}
+
+h2 {
+    font-size: 28px;
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 0px #222;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 10px;
+    border: 2px solid black;
+    outline: none;
+    background: #fff6d5;
+    box-shadow: 3px 3px 0px #222;
+    font-size: 16px;
+}
+
+button {
+    width: 100%;
+    padding: 14px;
+    background: #ff8c00;
+    border: none;
+    color: white;
+    font-size: 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    box-shadow: 3px 3px 0px #222;
+    transition: transform 0.1s ease, background 0.3s ease;
+}
+
+button:hover {
+    background: #ff6500;
+}
+
+button:active {
+    transform: scale(0.95);
+}
+
+p {
+    margin-top: 10px;
+    font-size: 16px;
+}
+
+a {
+    color: #222;
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+/* Doodle elements */
+.doodle {
+    position: absolute;
+    font-size: 50px; /* Slightly larger for desktop */
+    opacity: 0.3;
+    pointer-events: none; /* Prevents doodles from interacting with clicks */
+}
+
+.doodle-1 { top: -10px; left: -10px; transform: rotate(-15deg); }
+.doodle-2 { bottom: -10px; right: -10px; transform: rotate(15deg); }
+
+/* Desktop and Laptop */
+@media (min-width: 769px) {
+    .container {
+        padding: 30px;
+        max-width: 450px; /* Larger container for wider screens */
+    }
+
+    h2 {
+        font-size: 28px; /* Slightly larger title */
+    }
+
+    input, button {
+        font-size: 16px;
+    }
+
+    .doodle {
+        font-size: 50px; /* Larger doodles for desktop */
+    }
+}
+
+/* Tablet (Min-width 600px to 768px) */
+@media (min-width: 600px) and (max-width: 768px) {
+    .container {
+        padding: 25px;
+        width: 90%; /* Makes sure it's within the tablet screen */
+    }
+
+    h2 {
+        font-size: 24px; /* Adjust heading size for tablets */
+    }
+
+    input, button {
+        font-size: 15px; /* Adjust input and button font size */
+    }
+
+    .doodle {
+        font-size: 40px; /* Smaller doodles for tablet */
+    }
+}

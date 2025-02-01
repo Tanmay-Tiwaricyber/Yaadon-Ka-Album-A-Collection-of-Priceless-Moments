@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registered Users</title>
+    <link rel="stylesheet" href="/css/user.css">
+</head>
+<body>
+    <h1>Registered Users</h1>
+    <ul>
+        <% users.forEach(user => { %>
+            <li><strong>Username: </strong><%= user.username %></li>
+            <li><strong>Password: </strong><%= user.password %></li>
+            <br>
+        <% }) %>
+    </ul>
+    <p>Logged in as: <strong><%= loggedInUser %></strong></p>
+    <a href="/gallery">Back to Gallery</a>
+</body>
+</html>

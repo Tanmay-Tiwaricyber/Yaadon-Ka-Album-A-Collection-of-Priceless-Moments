@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Batch 2024-25</title>
+    <link rel="stylesheet" href="/css/gallery.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Batch 2024-25</h1>
+            <a href="/gallery" class="btn-back">Back to Gallery</a>
+        </header>
+
+        <!-- Media Grid -->
+        <section class="media-grid">
+            <% if (files.length === 0) { %>
+                <p>No media found in this folder.</p>
+            <% } else { %>
+                <% files.forEach(file => { %>
+                    <% const filePath = '/uploads/' + folder + '/' + file; %>
+                    <% const fileType = file.split('.').pop().toLowerCase(); %>
+                    <div class="media-card">
+                        <% if (['jpg', 'jpeg', 'png', 'gif'].includes(fileType)) { %>
+                            <img src="<%= filePath %>" alt="Image" class="media-img">
+                        <% } else if (['mp4', 'webm', 'ogg'].includes(fileType)) { %>
+                            <video src="<%= filePath %>" controls class="media-video"></video>
+                        <% } %>
+                        <a href="/download/<%= folder %>/<%= file %>" class="btn-download">Download</a>
+                    </div>
+                <% }) %>
+            <% } %>
+        </section>
+    </div>
+</body>
+</html>

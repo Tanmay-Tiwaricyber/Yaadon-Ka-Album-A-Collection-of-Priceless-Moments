@@ -1,0 +1,124 @@
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Comic Sans MS', cursive, sans-serif; /* Doodle font */
+}
+
+body {
+    background-color: #fff5e6;
+    color: #333;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    min-height: 100vh;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    color: #ff6347;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.auth-links {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+}
+
+.auth-links .btn {
+    text-decoration: none;
+    color: #fff;
+    background-color: #ff8c00;
+    padding: 12px 25px;
+    border-radius: 30px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.auth-links .btn:hover {
+    background-color: #ff6500;
+}
+
+.doodle {
+    position: absolute;
+    font-size: 60px;
+    opacity: 0.2;
+    pointer-events: none;
+    animation: float 5s ease-in-out infinite;
+}
+
+.doodle-1 {
+    top: 5%;
+    left: 5%;
+}
+
+.doodle-2 {
+    top: 15%;
+    right: 5%;
+}
+
+/* Doodle Animation */
+@keyframes float {
+    0% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(20px);
+    }
+    100% {
+        transform: translateY(0);
+    }
+}
+
+/* Mobile Doodles */
+.mobile-doodles {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .mobile-doodles {
+        display: block;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .doodle-mobile {
+        font-size: 40px;
+        margin: 0 10px;
+    }
+
+    header h1 {
+        font-size: 2rem;
+    }
+
+    .auth-links {
+        flex-direction: column;
+        gap: 20px;
+    }
+}
+
+/* Small Screen Adjustments */
+@media (max-width: 480px) {
+    .doodle {
+        font-size: 50px;
+    }
+
+    header h1 {
+        font-size: 1.5rem;
+    }
+
+    .auth-links .btn {
+        font-size: 1rem;
+    }
+}

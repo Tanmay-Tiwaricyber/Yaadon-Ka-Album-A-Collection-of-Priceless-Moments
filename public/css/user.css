@@ -1,0 +1,84 @@
+/* General Page Styling */
+body {
+    font-family: 'Comic Sans MS', sans-serif; /* A fun and playful font */
+    background-color: #fdf6e3; /* Soft yellow background for a creative look */
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    color: #333;
+}
+
+/* Page Title */
+h1 {
+    font-size: 2.5rem;
+    color: #333;
+    margin-top: 30px;
+    font-family: 'Brush Script MT', cursive; /* Doodle-like handwritten font */
+    text-transform: uppercase; /* Make the title more playful */
+}
+
+/* User List Styling */
+ul {
+    list-style: none;
+    padding: 0;
+    max-width: 400px;
+    margin: 20px auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    border: 2px dashed #ff6347; /* Doodle border style */
+}
+
+ul li {
+    padding: 15px;
+    font-size: 1.2rem;
+    color: #555;
+    border-bottom: 1px dashed #ddd;
+    transition: background 0.3s, transform 0.3s;
+    border-left: 5px solid #ff6347; /* Left border in doodle color */
+}
+
+ul li:last-child {
+    border-bottom: none;
+}
+
+/* Hover Effect on List Items */
+ul li:hover {
+    background-color: #f8e1e1;
+    transform: translateX(5px); /* Doodle effect with subtle movement */
+}
+
+/* Logged-in User Info */
+p {
+    font-size: 1rem;
+    color: #666;
+    margin: 10px 0;
+    font-family: 'Comic Sans MS', sans-serif; /* Fun, doodle-like font for the text */
+}
+
+/* Back to Gallery Button */
+a {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 18px;
+    font-size: 1.2rem;
+    color: white;
+    background-color: #ff6347; /* Bright, doodle-inspired color */
+    text-decoration: none;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    transition: background 0.3s, transform 0.2s;
+}
+
+a:hover {
+    background-color: #ff4500;
+    transform: scale(1.05); /* Fun hover effect */
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    ul {
+        max-width: 90%;
+    }
+}
