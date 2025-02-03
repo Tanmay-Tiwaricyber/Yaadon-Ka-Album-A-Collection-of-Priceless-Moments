@@ -3,11 +3,11 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Arial', sans-serif;
+    font-family: 'Comic Sans MS', 'Chalkduster', cursive;
 }
 
 body {
-    background-color: #fafafa;
+    background-color: #fffbe6;
     color: #333;
     padding: 20px;
     display: flex;
@@ -15,16 +15,20 @@ body {
     align-items: flex-start;
     flex-direction: column;
     min-height: 100vh;
+    position: relative;
 }
 
 header {
     text-align: center;
     margin-bottom: 40px;
+    border-bottom: 3px dashed #ff8c00;
+    padding-bottom: 10px;
 }
 
 header h1 {
     font-size: 2.5rem;
-    color: #4e4e4e;
+    color: #ff6500;
+    text-shadow: 2px 2px #ffd700;
 }
 
 header .btn-back {
@@ -34,162 +38,43 @@ header .btn-back {
     font-size: 1.1rem;
     margin-top: 10px;
     display: inline-block;
+    border: 2px dashed #ff8c00;
+    padding: 5px 15px;
+    border-radius: 12px;
+    transition: all 0.3s ease-in-out;
 }
 
 header .btn-back:hover {
-    color: #ff6500;
+    color: #fff;
+    background-color: #ff8c00;
 }
 
-/* Gallery Section */
-.gallery {
+/* Media Grid */
+.media-grid {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 15px;
 }
 
-.image {
-    width: 100%;
-    max-width: 250px;
+.media-card {
+    background: #fff;
+    border: 3px dashed #ff8c00;
+    padding: 10px;
+    border-radius: 15px;
+    box-shadow: 3px 3px #ffd700;
+    transition: transform 0.3s ease-in-out;
+}
+
+.media-card:hover {
+    transform: rotate(-3deg) scale(1.05);
+}
+
+.media-img, .media-video {
+    width: 250px;
     height: auto;
     border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s, box-shadow 0.3s;
-    cursor: pointer;
-}
-
-.image:hover {
-    transform: scale(1.05);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-}
-
-/* Enlarged Image */
-.image.enlarged {
-    transform: scale(2);
-    z-index: 1000;
-}
-
-/* Doodles */
-.doodle {
-    position: absolute;
-    font-size: 50px;
-    color: #ff8c00;
-    opacity: 0.2;
-    pointer-events: none;
-    animation: float 5s ease-in-out infinite;
-}
-
-.doodle-1 {
-    top: 10%;
-    left: 5%;
-}
-
-.doodle-2 {
-    top: 20%;
-    right: 5%;
-}
-
-.doodle-3 {
-    bottom: 10%;
-    left: 5%;
-}
-
-.doodle-4 {
-    bottom: 20%;
-    right: 5%;
-}
-
-@keyframes float {
-    0% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(20px);
-    }
-    100% {
-        transform: translateY(0);
-    }
-}
-
-/* Mobile Doodles */
-.mobile-doodles {
-    display: none;
-}
-
-@media (max-width: 768px) {
-    .mobile-doodles {
-        display: block;
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        text-align: center;
-        padding: 20px;
-    }
-
-    .doodle-mobile {
-        font-size: 40px;
-        margin: 0 10px;
-    }
-
-    header h1 {
-        font-size: 2rem;
-    }
-
-    .gallery {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .image {
-        max-width: 100%;
-    }
-
-    footer {
-        display: none;
-    }
-}
-
-/* Enlarged Image Modal */
-.enlarged {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    padding: 20px;
-}
-
-.enlarged img {
-    max-width: 80%;
-    max-height: 80%;
-    border-radius: 12px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
-}
-
-/* Responsiveness for Very Small Screens */
-@media (max-width: 480px) {
-    .doodle {
-        font-size: 40px;
-    }
-
-    header h1 {
-        font-size: 1.5rem;
-    }
-
-    .image {
-        max-width: 200px;
-    }
-
-    .gallery {
-        flex-direction: column;
-        align-items: center;
-    }
+    display: block;
 }
 
 .btn-download {
@@ -198,11 +83,51 @@ header .btn-back:hover {
     background: #28a745;
     color: #fff;
     padding: 5px 12px;
-    border-radius: 5px;
+    border-radius: 12px;
     text-decoration: none;
     font-weight: bold;
+    border: 2px dashed #218838;
+    transition: all 0.3s;
 }
 
 .btn-download:hover {
     background: #218838;
+    border-color: #fff;
+}
+
+/* Doodles */
+.doodle {
+    position: absolute;
+    font-size: 50px;
+    color: #ff8c00;
+    opacity: 0.3;
+    pointer-events: none;
+    animation: float 5s ease-in-out infinite;
+}
+
+.doodle-1 { top: 10%; left: 5%; }
+.doodle-2 { top: 20%; right: 5%; }
+.doodle-3 { bottom: 10%; left: 5%; }
+.doodle-4 { bottom: 20%; right: 5%; }
+
+@keyframes float {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(10px); }
+    100% { transform: translateY(0); }
+}
+
+/* Mobile Doodles */
+@media (max-width: 768px) {
+    .doodle {
+        font-size: 40px;
+    }
+
+    header h1 {
+        font-size: 2rem;
+    }
+
+    .media-grid {
+        flex-direction: column;
+        align-items: center;
+    }
 }
