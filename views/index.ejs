@@ -1,45 +1,27 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Digital Gallery</title>
-    <link rel="stylesheet" href="/css/index.css">
+    <title>Enter Name</title>
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-    <!-- Doodle elements -->
-    <div class="doodle doodle-1">🎨</div>
-    <div class="doodle doodle-2">🌟</div>
+    <div class="container">
+        <span class="doodle doodle-1">🎨</span>
 
-    <!-- Main Content -->
-    <header>
         <h1>Welcome to the Digital Gallery</h1> <br>
         <hr>
         <h4>“Yaadon Ka Album – A Collection of Priceless Moments”</h4>
         <hr> <br>
         <h3>Exclusively for Batch 2024-25</h3>
-        <h3>Class of 12th Grade</h3>
-        <h3>Upload All Your Cherished Memories</h3>
-        
-        <br><br>
-        
-
-        <div class="auth-links">
-            <!-- <a href="/login" class="btn">Login</a> -->
-            <a href="/register" class="btn">Start</a>
-        </div>
-    </header>
-
-    <!-- Mobile Doodle Elements (Hidden on Desktop) -->
-    <footer>
-        <div class="mobile-doodles">
-            <div class="doodle-mobile doodle-1">🎨</div> 
-            <div class="doodle-mobile doodle-2">🌟</div>
-        </div>
-    </footer>
-
-    <script>
-        // Optional: Add interactive doodle effects or animation
-    </script>
+        <h3>Class of 12th B Grade</h3>
+        <h3>Upload All Your Cherished Memories</h3> <br> <hr> <br>
+        <form action="/get-name" method="POST">
+            <input type="text" name="username" placeholder="Enter your name" required>
+            <button type="submit">Let's Goooo</button>
+        </form>
+        <span class="doodle doodle-2">✨</span>
+    </div>
 </body>
 </html>
+
