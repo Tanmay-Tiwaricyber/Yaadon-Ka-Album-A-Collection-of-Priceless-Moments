@@ -1,6 +1,5 @@
 const express = require("express");
 const session = require("express-session");
-const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 
@@ -10,6 +9,8 @@ const PORT = 3000;
 // Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
+app.use("/uploads", express.static(path.join(__dirname, "public", "uploads"))); // Serve uploads correctly
+app.use(express.json()); // Enable JSON parsing
 app.set("view engine", "ejs");
 
 // Session setup for storing username
@@ -22,8 +23,11 @@ app.use(
   })
 );
 
-// Temporary storage for posts
+// Temporary storage
+const users = []; // Store registered users
 const posts = [];
+const comments = {}; // Store comments per post
+const likes = {}; // Store likes per post
 
 // Ensure upload folders exist
 const folders = ["A"];
@@ -31,33 +35,22 @@ folders.forEach((folder) => {
   fs.mkdirSync(path.join(__dirname, "public", "uploads", folder), { recursive: true });
 });
 
-// Multer setup for file uploads (images & videos)
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const folder = req.body.folder || "A";
-    const uploadPath = path.join(__dirname, "public", "uploads", folder);
-    fs.mkdirSync(uploadPath, { recursive: true });
-    cb(null, uploadPath);
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
-  },
-});
+// Load images and videos dynamically from uploads directory
+const loadMediaFiles = () => {
+  posts.length = 0; // Clear posts array
+  folders.forEach((folder) => {
+    const folderPath = path.join(__dirname, "public", "uploads", folder);
+    const files = fs.readdirSync(folderPath);
+    files.forEach((file, index) => {
+      const fileType = file.split(".").pop().toLowerCase();
+      posts.push({ id: (index + 1).toString(), username: "User", folder, filename: file, fileType: ["jpg", "jpeg", "png", "gif"].includes(fileType) ? "image" : "video" });
+    });
+  });
+};
+loadMediaFiles();
 
-const upload = multer({
-  storage,
-  fileFilter: (req, file, cb) => {
-    const allowedTypes = ["image/png", "image/jpeg", "image/jpg", "video/mp4", "video/webm"];
-    if (allowedTypes.includes(file.mimetype)) {
-      cb(null, true);
-    } else {
-      cb(new Error("Only images and MP4/WEBM videos are allowed"));
-    }
-  },
-});
-
-// Routes
-app.get("/", (req, res) => res.render("index")); // Home page (asks for name)
+// Home page (asks for name)
+app.get("/", (req, res) => res.render("index"));
 
 // Handle name submission and redirect to gallery
 app.post("/get-name", (req, res) => {
@@ -67,39 +60,58 @@ app.post("/get-name", (req, res) => {
   res.redirect("/gallery");
 });
 
-// Show gallery with posts
+// Show gallery with dynamically loaded posts
 app.get("/gallery", (req, res) => {
   if (!req.session.user) return res.redirect("/");
-  res.render("gallery", { user: req.session.user, folders, posts });
+  loadMediaFiles(); // Refresh media files
+  res.render("gallery", { user: req.session.user, folders, posts, likes, comments });
 });
 
-// Upload image or video
-app.post("/upload", upload.single("file"), (req, res) => {
-  if (!req.session.user) return res.redirect("/");
+// Like a post (AJAX support)
+app.post("/like", (req, res) => {
+  if (!req.session.user) return res.status(401).json({ error: "Unauthorized" });
 
-  const { folder } = req.body;
-  const filename = req.file.filename;
-  const fileType = req.file.mimetype.startsWith("video/") ? "video" : "image";
-  const username = req.session.user;
+  const { postId } = req.body;
+  if (!postId) return res.status(400).json({ error: "Invalid post ID" });
 
-  // Save uploaded file details
-  posts.push({ username, folder, filename, fileType });
+  if (!likes[postId]) {
+      likes[postId] = [];
+  }
+  if (!likes[postId].includes(req.session.user)) {
+      likes[postId].push(req.session.user);
+  }
 
-  res.redirect(`/uploads/${folder}`);
+  res.json({ success: true, likes: likes[postId] });
 });
 
-// Show uploaded images & videos in folder
-app.get("/uploads/:folder", (req, res) => {
-  if (!req.session.user) return res.redirect("/");
+// Comment on a post (AJAX support)
+app.post("/comment", (req, res) => {
+  if (!req.session.user) return res.status(401).json({ error: "Unauthorized" });
 
-  const folder = req.params.folder;
-  const folderPath = path.join(__dirname, "public", "uploads", folder);
+  const { postId, comment } = req.body;
+  if (!postId || !comment) return res.status(400).json({ error: "Invalid request" });
 
-  fs.readdir(folderPath, (err, files) => {
-    if (err) return res.status(404).send("Folder not found");
-    const folderPosts = posts.filter((post) => post.folder === folder);
-    res.render("folder", { folder, files, folderPosts });
-  });
+  if (!comments[postId]) {
+      comments[postId] = [];
+  }
+  comments[postId].push({ user: req.session.user, text: comment });
+
+  res.json({ success: true, comments: comments[postId] });
+});
+
+// Delete comment (only for "deathnote")
+app.post("/delete-comment", (req, res) => {
+  if (!req.session.user || req.session.user !== "deathnote") return res.status(403).json({ error: "Permission denied" });
+
+  const { postId, commentIndex } = req.body;
+  if (!postId || commentIndex === undefined) return res.status(400).json({ error: "Invalid request" });
+
+  if (comments[postId] && comments[postId][commentIndex]) {
+    comments[postId].splice(commentIndex, 1);
+    return res.json({ success: true, comments: comments[postId] });
+  } else {
+    return res.status(404).json({ error: "Comment not found" });
+  }
 });
 
 // Serve file downloads
@@ -114,6 +126,11 @@ app.get("/download/:folder/:filename", (req, res) => {
   } else {
     res.status(404).send("File not found");
   }
+});
+
+// Show registered users
+app.get("/users", (req, res) => {
+  res.render("users", { users, loggedInUser: req.session.user });
 });
 
 // Start server
