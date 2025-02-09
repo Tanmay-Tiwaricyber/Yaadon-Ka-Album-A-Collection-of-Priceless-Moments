@@ -3,27 +3,131 @@
 <head>
     <title>Gallery</title>
     <link rel="stylesheet" href="/css/gallery.css">
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Handle Like Button Click
+            document.querySelectorAll(".like-button").forEach(button => {
+                button.addEventListener("click", function (event) {
+                    event.preventDefault();
+                    const postId = this.dataset.postId;
+
+                    fetch("/like", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ postId })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            document.querySelector(`#like-count-${postId}`).innerText = `Likes: ${data.likes.length}`;
+                            document.querySelector(`#like-users-${postId}`).innerText = `Liked by: ${data.likes.join(", ")}`;
+                        }
+                    });
+                });
+            });
+
+            // Handle Comment Submission
+            document.querySelectorAll(".comment-form").forEach(form => {
+                form.addEventListener("submit", function (event) {
+                    event.preventDefault();
+                    const postId = this.dataset.postId;
+                    const commentInput = this.querySelector(".comment-input");
+
+                    fetch("/comment", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ postId, comment: commentInput.value })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            const commentList = document.querySelector(`#comments-${postId}`);
+                            commentList.innerHTML = "";
+                            data.comments.forEach((comment, index) => {
+                                let deleteButton = "";
+                                if ("<%= user %>" === "deathnote") {
+                                    deleteButton = `<button class='delete-comment' data-post-id='${postId}' data-comment-index='${index}'>❌</button>`;
+                                }
+                                commentList.innerHTML += `<li><strong>${comment.user}:</strong> ${comment.text} ${deleteButton}</li>`;
+                            });
+                            commentInput.value = "";
+                        }
+                    });
+                });
+            });
+
+            // Handle Comment Deletion
+            document.addEventListener("click", function (event) {
+                if (event.target.classList.contains("delete-comment")) {
+                    event.preventDefault();
+                    const postId = event.target.dataset.postId;
+                    const commentIndex = event.target.dataset.commentIndex;
+
+                    fetch("/delete-comment", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ postId, commentIndex })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            const commentList = document.querySelector(`#comments-${postId}`);
+                            commentList.innerHTML = "";
+                            data.comments.forEach((comment, index) => {
+                                let deleteButton = "";
+                                if ("<%= user %>" === "deathnote") {
+                                    deleteButton = `<button class='delete-comment' data-post-id='${postId}' data-comment-index='${index}'>❌</button>`;
+                                }
+                                commentList.innerHTML += `<li><strong>${comment.user}:</strong> ${comment.text} ${deleteButton}</li>`;
+                            });
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 </head>
 <body>
     <div class="container">
         <h2>Welcome, <%= user %>!</h2>
-        <!-- <a href="/">Change Name</a> -->
-        <h3>Upload an Image or Video</h3>
-        <form action="/upload" method="POST" enctype="multipart/form-data">
-            <input type="file" name="file" required>
-            <select name="folder">
-                <option value="A">2024-25</option>
-            </select>
-            <button type="submit">Upload</button>
-        </form>
+        <a href="/">Logout</a>
 
-        <h3>Photos are here</h3>
-        <ul>
-            <div class="folder-list">
-                <a href="/uploads/A" class="folder-card">Memories Pic</a>
-            </div>
-        </ul>
-        <br>
+        <h3>Gallery</h3>
+        <div class="gallery">
+            <% posts.forEach(post => { %>
+                <div class="post">
+                    <% const filePath = `/uploads/${post.folder}/${post.filename}`; %>
+                    <% if (post.fileType === 'image') { %>
+                        <img src="<%= filePath %>" alt="Image">
+                    <% } else if (post.fileType === 'video') { %>
+                        <video controls>
+                            <source src="<%= filePath %>">
+                        </video>
+                    <% } %>
+                    <button class="like-button" data-post-id="<%= post.id %>">Like</button>
+                    <p id="like-count-<%= post.id %>">Likes: <%= likes[post.id] ? likes[post.id].length : 0 %></p>
+                    <p id="like-users-<%= post.id %>">Liked by: <%= likes[post.id] ? likes[post.id].join(", ") : "No one yet" %></p>
+                    <form class="comment-form" data-post-id="<%= post.id %>">
+                        <input type="text" class="comment-input" placeholder="Add a comment" required>
+                        <button type="submit">Comment</button>
+                    </form>
+                    Comments
+                    <div class="comment-box" style="max-height: 100px; overflow-y: auto;">
+                        <ul id="comments-<%= post.id %>">
+                            <% if (comments[post.id]) { %>
+                                <% comments[post.id].forEach((comment, index) => { %>
+                                    <li><strong><%= comment.user %>:</strong> <%= comment.text %>
+                                    <% if (user === "deathnote") { %>
+                                        <button class='delete-comment' data-post-id='<%= post.id %>' data-comment-index='<%= index %>'>❌</button>
+                                    <% } %>
+                                    </li>
+                                <% }) %>
+                            <% } %>
+                        </ul>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
     </div>
 </body>
 </html>
