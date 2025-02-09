@@ -136,16 +136,3 @@ app.get("/users", (req, res) => {
 // Start server
 app.listen(PORT, () => console.log(`Server running at http://localhost:${PORT}`));
 
-// Route to get a random image from uploads/A folder
-app.get("/random-image", (req, res) => {
-  const folderPath = path.join(__dirname, "public", "uploads", "A");
-  
-  fs.readdir(folderPath, (err, files) => {
-      if (err || files.length === 0) {
-          return res.json({ imagePath: "/images/default.jpg" }); // Default image if no images found
-      }
-
-      const randomFile = files[Math.floor(Math.random() * files.length)];
-      res.json({ imagePath: `public/uploads/A/${randomFile}` });
-  });
-});
